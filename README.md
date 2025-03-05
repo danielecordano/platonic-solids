@@ -1,1 +1,1 @@
-Live on [GitHub Pages](danielecordano.github.io/platonic-solids/)
+Live on [GitHub Pages](https://danielecordano.github.io/platonic-solids/)
