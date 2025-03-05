@@ -7,9 +7,26 @@
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+        }
+        button {
+            font-size: 16px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+<div id="controls">
+    <button id="toggleAnimation">Pause</button>
+</div>
 
 <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
@@ -61,13 +78,23 @@
     light.position.set(5, 5, 5);
     scene.add(light);
 
+    let isAnimating = true;
+
     function animate() {
-        requestAnimationFrame(animate);
-        stellatedDodecahedron.rotation.y += 0.01;
+        if (isAnimating) {
+            stellatedDodecahedron.rotation.y += 0.01;
+        }
         renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     }
 
     animate();
+
+    // Play/Pause button functionality
+    document.getElementById("toggleAnimation").addEventListener("click", function () {
+        isAnimating = !isAnimating;
+        this.textContent = isAnimating ? "Pause" : "Play";
+    });
 
     // Resize canvas on window resize
     window.addEventListener('resize', () => {
