@@ -101,15 +101,15 @@
 
     let isRotating = false;
 
-    function rotateVertex() {
+    function rotate(targetRot) {
         if (isRotating) {
-            const residual = Math.abs(icosahedron.rotation.y - 1.0);
+            const residual = Math.abs(icosahedron.rotation.y - targetRot);
             if (residual > (speedRotation / 2.0)) {
                 icosahedron.rotation.y += speedRotation;
                 if (icosahedron.rotation.y > Math.PI)
                     icosahedron.rotation.y -= 2 * Math.PI;
                 renderer.render(scene, camera);
-                requestAnimationFrame(rotateVertex);
+                requestAnimationFrame(function() {rotate(targetRot)});
             }
             else {
                 isRotating = false;
@@ -119,46 +119,18 @@
                 document.getElementById("toggleAnimation").disabled = false;
             }
         }
+    }
+
+    function rotateVertex() {
+        rotate(1.0);
     }
 
     function rotateEdge() {
-        if (isRotating) {
-            const residual = Math.abs(icosahedron.rotation.y - 0.0);
-            if (residual > (speedRotation / 2.0)) {
-                icosahedron.rotation.y += speedRotation;
-                if (icosahedron.rotation.y > Math.PI)
-                    icosahedron.rotation.y -= 2 * Math.PI;
-                renderer.render(scene, camera);
-                requestAnimationFrame(rotateEdge);
-            }
-            else {
-                isRotating = false;
-                document.getElementById("vertex").disabled = false;
-                document.getElementById("edge").disabled = false;
-                document.getElementById("face").disabled = false;
-                document.getElementById("toggleAnimation").disabled = false;
-            }
-        }
+        rotate(0.0);
     }
 
     function rotateFace() {
-        if (isRotating) {
-            const residual = Math.abs(icosahedron.rotation.y - 0.36);
-            if (residual > (speedRotation / 2.0)) {
-                icosahedron.rotation.y += speedRotation;
-                if (icosahedron.rotation.y > Math.PI)
-                    icosahedron.rotation.y -= 2 * Math.PI;
-                renderer.render(scene, camera);
-                requestAnimationFrame(rotateFace);
-            }
-            else {
-                isRotating = false;
-                document.getElementById("vertex").disabled = false;
-                document.getElementById("edge").disabled = false;
-                document.getElementById("face").disabled = false;
-                document.getElementById("toggleAnimation").disabled = false;
-            }
-        }
+        rotate(0.36);
     }
 
     // Play/Pause button functionality
