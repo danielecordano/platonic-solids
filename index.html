@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellated Dodecahedron</title>
+    <title>Icosahedron</title>
+    <link rel="icon" type="image/x-icon" href="icosahedron.png">
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -26,12 +27,15 @@
 
 <div id="controls">
     <button id="toggleAnimation">Pause</button>
+    <button id="vertex">Vertex</button>
+    <button id="edge">Edge</button>
+    <button id="face">Face</button>
 </div>
 
 <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
 
-    function createStellatedDodecahedron() {
+    function createIcosahedron() {
                 const t = ( 1 + Math.sqrt( 5 ) ) / 2;
 
                 const vertices = [
@@ -65,24 +69,29 @@
     // Set up Three.js scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 6;
+    camera.position.z = 8;
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const stellatedDodecahedron = createStellatedDodecahedron();
-    scene.add(stellatedDodecahedron);
+    const icosahedron = createIcosahedron();
+    scene.add(icosahedron);
 
     const light = new THREE.PointLight(0xffffff, 1, 100);
     light.position.set(5, 5, 5);
     scene.add(light);
 
+    const speedAnimation = 0.01;
+    const speedRotation = 0.1;
     let isAnimating = true;
 
     function animate() {
+        console.log(icosahedron.rotation.y);
         if (isAnimating) {
-            stellatedDodecahedron.rotation.y += 0.01;
+            icosahedron.rotation.y += speedAnimation;
+            if (icosahedron.rotation.y > Math.PI)
+                icosahedron.rotation.y -= 2 * Math.PI;
         }
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
@@ -90,11 +99,110 @@
 
     animate();
 
+    let isRotating = false;
+
+    function rotateVertex() {
+        if (isRotating) {
+            const residual = Math.abs(icosahedron.rotation.y - 1.0);
+            if (residual > (speedRotation / 2.0)) {
+                icosahedron.rotation.y += speedRotation;
+                if (icosahedron.rotation.y > Math.PI)
+                    icosahedron.rotation.y -= 2 * Math.PI;
+                renderer.render(scene, camera);
+                requestAnimationFrame(rotateVertex);
+            }
+            else {
+                isRotating = false;
+                document.getElementById("vertex").disabled = false;
+                document.getElementById("edge").disabled = false;
+                document.getElementById("face").disabled = false;
+                document.getElementById("toggleAnimation").disabled = false;
+            }
+        }
+    }
+
+    function rotateEdge() {
+        if (isRotating) {
+            const residual = Math.abs(icosahedron.rotation.y - 0.0);
+            if (residual > (speedRotation / 2.0)) {
+                icosahedron.rotation.y += speedRotation;
+                if (icosahedron.rotation.y > Math.PI)
+                    icosahedron.rotation.y -= 2 * Math.PI;
+                renderer.render(scene, camera);
+                requestAnimationFrame(rotateEdge);
+            }
+            else {
+                isRotating = false;
+                document.getElementById("vertex").disabled = false;
+                document.getElementById("edge").disabled = false;
+                document.getElementById("face").disabled = false;
+                document.getElementById("toggleAnimation").disabled = false;
+            }
+        }
+    }
+
+    function rotateFace() {
+        if (isRotating) {
+            const residual = Math.abs(icosahedron.rotation.y - 0.36);
+            if (residual > (speedRotation / 2.0)) {
+                icosahedron.rotation.y += speedRotation;
+                if (icosahedron.rotation.y > Math.PI)
+                    icosahedron.rotation.y -= 2 * Math.PI;
+                renderer.render(scene, camera);
+                requestAnimationFrame(rotateFace);
+            }
+            else {
+                isRotating = false;
+                document.getElementById("vertex").disabled = false;
+                document.getElementById("edge").disabled = false;
+                document.getElementById("face").disabled = false;
+                document.getElementById("toggleAnimation").disabled = false;
+            }
+        }
+    }
+
     // Play/Pause button functionality
     document.getElementById("toggleAnimation").addEventListener("click", function () {
         isAnimating = !isAnimating;
         this.textContent = isAnimating ? "Pause" : "Play";
     });
+
+    // Vertex button functionality
+    document.getElementById("vertex").addEventListener("click", function () {
+        isAnimating = false;
+        document.getElementById("toggleAnimation").textContent = "Play";
+        document.getElementById("toggleAnimation").disabled = true;
+        isRotating = true;
+        document.getElementById("vertex").disabled = true;
+        document.getElementById("edge").disabled = true;
+        document.getElementById("face").disabled = true;
+        rotateVertex();
+    });
+
+    // Edge button functionality
+    document.getElementById("edge").addEventListener("click", function () {
+        isAnimating = false;
+        document.getElementById("toggleAnimation").textContent = "Play";
+        document.getElementById("toggleAnimation").disabled = true;
+        isRotating = true;
+        document.getElementById("vertex").disabled = true;
+        document.getElementById("edge").disabled = true;
+        document.getElementById("face").disabled = true;
+        rotateEdge();
+    });
+
+    // Face button functionality
+    document.getElementById("face").addEventListener("click", function () {
+        isAnimating = false;
+        document.getElementById("toggleAnimation").textContent = "Play";
+        document.getElementById("toggleAnimation").disabled = true;
+        isRotating = true;
+        document.getElementById("vertex").disabled = true;
+        document.getElementById("edge").disabled = true;
+        document.getElementById("face").disabled = true;
+        rotateFace();
+    });
+
 
     // Resize canvas on window resize
     window.addEventListener('resize', () => {
