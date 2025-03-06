@@ -133,6 +133,16 @@
         rotate(0.36);
     }
 
+    function disableControls() {
+        isAnimating = false;
+        document.getElementById("toggleAnimation").textContent = "Play";
+        document.getElementById("toggleAnimation").disabled = true;
+        isRotating = true;
+        document.getElementById("vertex").disabled = true;
+        document.getElementById("edge").disabled = true;
+        document.getElementById("face").disabled = true;
+    }
+
     // Play/Pause button functionality
     document.getElementById("toggleAnimation").addEventListener("click", function () {
         isAnimating = !isAnimating;
@@ -141,37 +151,19 @@
 
     // Vertex button functionality
     document.getElementById("vertex").addEventListener("click", function () {
-        isAnimating = false;
-        document.getElementById("toggleAnimation").textContent = "Play";
-        document.getElementById("toggleAnimation").disabled = true;
-        isRotating = true;
-        document.getElementById("vertex").disabled = true;
-        document.getElementById("edge").disabled = true;
-        document.getElementById("face").disabled = true;
+        disableControls();
         rotateVertex();
     });
 
     // Edge button functionality
     document.getElementById("edge").addEventListener("click", function () {
-        isAnimating = false;
-        document.getElementById("toggleAnimation").textContent = "Play";
-        document.getElementById("toggleAnimation").disabled = true;
-        isRotating = true;
-        document.getElementById("vertex").disabled = true;
-        document.getElementById("edge").disabled = true;
-        document.getElementById("face").disabled = true;
+        disableControls();
         rotateEdge();
     });
 
     // Face button functionality
     document.getElementById("face").addEventListener("click", function () {
-        isAnimating = false;
-        document.getElementById("toggleAnimation").textContent = "Play";
-        document.getElementById("toggleAnimation").disabled = true;
-        isRotating = true;
-        document.getElementById("vertex").disabled = true;
-        document.getElementById("edge").disabled = true;
-        document.getElementById("face").disabled = true;
+        disableControls();
         rotateFace();
     });
 
